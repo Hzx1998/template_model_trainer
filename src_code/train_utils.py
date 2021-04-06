@@ -6,21 +6,24 @@ import random
 import numpy as np
 import pandas as pd
 from email.mime.text import MIMEText
-
+from email.header import Header
 
 #发送定制邮件  
 #seed email to tell you when the model has been trained
 #错误记录：带默认值的参数不能在 默认值参数后面
-def send_success_email(title,text,From="******@qq.com",To="*******@qq.com",password="gjwxgnptasjcbeie"):
-    smtp = smtplib.SMTP()
-    print(smtp.connect('smtp.qq.com',25))
-    print(smtp.login(From,password))
-    mail = MIMEText(text)
+def send_success_email(title,text,From="924024667@qq.com",To=["924024667@qq.com"],password="gjwxgnptasjcbeie"):
+    mail = MIMEText(text,'plain','utf-8')
     mail['Subject']=title
     mail['From']='Aibool@ai.com'
     mail['To']='user@ai.com'
-    smtp.sendmail(From,To,mail.as_string())
-    print("success")
+    try:
+        smtp = smtplib.SMTP()
+        smtp.connect('smtp.qq.com',25)
+        smtp.login(From,password)
+        smtp.sendmail(From,To,mail.as_string())
+        print("success")
+    except smtplib.SMTPException:
+        print("error")
     smtp.quit()
 #设置随机数种子
 def set_seed(seed,n_gpu):
